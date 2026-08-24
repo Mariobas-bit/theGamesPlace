@@ -83,6 +83,33 @@ function enterLobbyRoom(roomCode) {
         });
 }
 
+// FUNCTION 4: BROADCAST A CHAT MESSAGE TO THE LOBBY
+function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const messageText = input.value.trim();
+
+    // Don't send empty messages
+    if (!messageText) return;
+
+    // Check if we are actually connected to a room channel
+    if (currentRoomChannel) {
+        // Send the message across the real-time network
+        currentRoomChannel.send({
+            type: 'broadcast',
+            event: 'chat',
+            payload: { message: messageText }
+        });
+
+        // Log your own message onto your local screen
+        logToLobbyBox(`You: ${messageText}`);
+        
+        // Clear the input box for the next message
+        input.value = '';
+    } else {
+        alert("You are not connected to a lobby channel!");
+    }
+}
+
 function logToLobbyBox(text) {
     const chatBox = document.getElementById('chatBox');
     const p = document.createElement('p');
