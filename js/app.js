@@ -1,6 +1,6 @@
 // Connect your frontend script to your Supabase cloud backend
-const SUPABASE_URL = "YOUR_SUPABASE_URL"; 
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://mopqlwkzfhqlomnlwrli.supabase.co"; 
+const SUPABASE_ANON_KEY = "sb_publishable_gP6-gqeJKQuli67RRauB0w_u2xLaldk";
 const supabase = createClient.initializeSupabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentRoomChannel = null;
