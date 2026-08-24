@@ -1,9 +1,15 @@
-// Connect your frontend script to your Supabase cloud backend
 const SUPABASE_URL = "https://supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_gP6-gqeJKQuli67RRauB0w_u2xLaldk";
 
-// FIX: Changed name to supabaseClient to prevent the initialization loop error
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let supabaseClient = null;
+
+// SAFETY CHECK: Makes sure the browser downloaded the Supabase tools before running
+if (typeof window.supabase !== 'undefined') {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else {
+    console.error("CRITICAL ERROR: Supabase failed to load from the internet. Check your network or adblocker.");
+    alert("Network Error: Could not connect to the multiplayer engine. Check browser console.");
+}
 
 let currentRoomChannel = null;
 
