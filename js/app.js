@@ -1,7 +1,9 @@
 // Connect your frontend script to your Supabase cloud backend
-const SUPABASE_URL = "https://mopqlwkzfhqlomnlwrli.supabase.co"; 
+const SUPABASE_URL = "https://supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_gP6-gqeJKQuli67RRauB0w_u2xLaldk";
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// FIX: Changed name to supabaseClient to prevent the initialization loop error
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentRoomChannel = null;
 
@@ -10,8 +12,8 @@ async function createLobby() {
     // Generate a random 4-letter room code
     const code = Math.random().toString(36).substring(2, 6).toUpperCase();
     
-    // Save this new room code inside the Supabase database
-    const { error } = await supabase
+    // FIX: Updated to use our new supabaseClient name
+    const { error } = await supabaseClient
         .from('lobbies')
         .insert([{ room_code: code }]);
 
@@ -30,8 +32,8 @@ async function joinLobby() {
     const code = document.getElementById('lobbyCodeInput').value.toUpperCase().trim();
     if (code.length !== 4) return alert("Please enter a valid 4-digit code.");
 
-    // Check the cloud database if this room code actually exists
-    const { data, error } = await supabase
+    // FIX: Updated to use our new supabaseClient name
+    const { data, error } = await supabaseClient
         .from('lobbies')
         .select('*')
         .eq('room_code', code);
@@ -52,8 +54,8 @@ function enterLobbyRoom(roomCode) {
     document.getElementById('gameArea').style.display = 'block';
     document.getElementById('currentRoomCode').innerText = roomCode;
 
-    // Create a live WebSocket broadcast channel named after our room code
-    currentRoomChannel = supabase.channel(`room_${roomCode}`, {
+    // FIX: Updated to use our new supabaseClient name
+    currentRoomChannel = supabaseClient.channel(`room_${roomCode}`, {
         config: { presence: { key: 'player' } }
     });
 
